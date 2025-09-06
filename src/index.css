@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme{
+    --color-primary:#6c63ff
+}
+body{
+    overflow-x: hidden;
+}
+.card{
+    @apply p-4 shadow-md shadow-gray-200/50 border border-gray-200/50 rounded-xl m-4 bg-white 
+}
+.form-input{
+    @apply w-full bg-transparent outline-none border border-gray-200  rounded-md py-2 px-4 mt-1
+}
+.card-btn-fill{
+    @apply bg-primary text-white px-5 py-1.5 rounded-lg font-semibold cursor-pointer hover:bg-primary/90 transition-all mt-2 w-full
+}
+.card-btn{
+    @apply text-primary bg-primary/25 px-5 py-1.5 rounded-lg font-semibold cursor-pointer hover:border-purple-500 transition-all mt-2 w-full
+}
