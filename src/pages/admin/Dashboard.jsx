@@ -8,8 +8,10 @@ import { Link } from 'react-router'
 import TaskList from '../../components/TaskList'
 import CustomPieChart from '../../components/charts/CustomPieChart'
 import CustombarChart from '../../components/charts/CustombarChart'
- const COLORS = ["#8884d8", "#3de882ff", "#12ebbcff"];
+import Loading from '../../components/Loading'
+const COLORS = ["#8884d8", "#3de882ff", "#12ebbcff"];
 const Dashboard = () => {
+  const [loading, setLoading] = useState(false)
   const { user } = useAuth()
   const [dashboardData, setDashboardData] = useState({})
   const [pieChartData, setPieChartData] = useState([])
@@ -33,16 +35,25 @@ const Dashboard = () => {
 
   }
   const getdashboardData = async () => {
-    const response = await axiosInstance.get(API_PATHS.TASKS.GET_DASHBOARD_DATA);
-    setDashboardData(response.data)
-    prepareChartData(response.data)
-    console.log(response.data);
+    try {
+      setLoading(true)
+      const response = await axiosInstance.get(API_PATHS.TASKS.GET_DASHBOARD_DATA);
+      setDashboardData(response.data)
+      prepareChartData(response.data)
+
+    } catch (error) {
+      console.log("Error while Fetching dashboard data", error);
+      setLoading(false)
+    } finally {
+      setLoading(false)
+    }
 
   }
   useEffect(() => {
-
     getdashboardData()
   }, [])
+
+  if(loading) return <Loading/>
   return (
     <DashboardLayout activeMenu="Dashboard">
       <div className='card'>
@@ -85,14 +96,14 @@ const Dashboard = () => {
         <div>
           <div className='card'>
             <h2 className='text-xl text-gray-800 font-medium mb-2'>Task Distributions</h2>
-            <CustomPieChart COLORS={COLORS} data={pieChartData}/>
+            <CustomPieChart COLORS={COLORS} data={pieChartData} />
           </div>
-        
+
         </div>
-          <div className='card'>
-            <h2 className='text-xl text-gray-800 font-medium mb-2'>Task Priorities</h2>
-            <CustombarChart data={barChartData}/>
-          </div>
+        <div className='card'>
+          <h2 className='text-xl text-gray-800 font-medium mb-2'>Task Priorities</h2>
+          <CustombarChart data={barChartData} />
+        </div>
         {/* recent tasks */}
         <div className=" card md:col-span-2">
           <div className='flex justify-between items-center'>

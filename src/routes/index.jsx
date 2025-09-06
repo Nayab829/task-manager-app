@@ -14,9 +14,8 @@ import TaskDetails from "../pages/user/TaskDetails";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element:<PrivateRoute>
-        <DashboardLayout />
-      </PrivateRoute>,
+    element:<PrivateRoute/>,
+       
     children: [
       { index: true, element: <Dashboard /> }, // 👈 default route
       { path: "/admin/dashboard", element: <Dashboard /> },

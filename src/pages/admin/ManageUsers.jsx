@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import axiosInstance from '../../utils/axiosInstance'
 import { API_PATHS } from '../../utils/apiPaths'
+import Loading from '../../components/Loading'
 
 const ManageUsers = () => {
   const [allUsers, setAllUsers] = useState([])
+  const [loading, setLoading] = useState(false)
   const fetchUsers = async () => {
     try {
+      setLoading(true)
       const response = await axiosInstance.get(API_PATHS.AUTH.GET_ALL_USERS);
       if (response.data.length > 0) {
         setAllUsers(response.data);
@@ -15,12 +18,16 @@ const ManageUsers = () => {
 
     } catch (error) {
       console.log(error.response?.message || error.message);
+      setLoading(false)
+    } finally {
+      setLoading(false)
 
     }
   }
   useEffect(() => {
     fetchUsers()
   }, [])
+  if(loading) return <Loading/>
   return (
     <DashboardLayout activeMenu="Manage Users">
       <div className='p-4'>

@@ -1,36 +1,52 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
-// import { useNavigate } from "react-router";
 
 const UserContext = createContext();
 
 
 const UserProvider = ({ children }) => {
-    // const navigate = useNavigate()
-    const [user, setUser] = useState({});
-    const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                setLoading(true);
+                // setLoading(true);
                 const response = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE, { withCredentials: true });
-                setUser(response.data.user);
-                console.log(response);
+                if (response.data?.data) {
+                    setUser(response.data.data);
+                    // ✅ profile se direct user set
+
+                } else {
+                    setUser(null);
+                }
             } catch (error) {
-                console.log(error);
+                console.log("Error fetching profile:", error);
+                setUser(null);
+                localStorage.removeItem("token");
             } finally {
                 setLoading(false);
             }
+
         };
-        fetchUser();
+        const token = localStorage.getItem("token");
+        if (token) {
+            fetchUser();
+        } else {
+            setLoading(false);
+        }
     }, []); // 🔹 empty dependency array
+    useEffect(() => {
+        if (user) {
+            console.log("User updated:", user);
+        }
+    }, [user]);
     const updateUser = (userData) => {
         setUser(userData.data);
         localStorage.setItem("token", userData.token);
         setLoading(false)
-        
+
     }
     const clearUser = () => {
         setUser(null);

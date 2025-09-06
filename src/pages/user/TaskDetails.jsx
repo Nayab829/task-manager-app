@@ -6,15 +6,25 @@ import DashboardLayout from '../../components/Layouts/DashboardLayout';
 import { getStatusbadgeColor } from '../../utils/helper';
 import dayjs from 'dayjs';
 import AvatarGroup from '../../components/AvatarGroup';
+import Loading from '../../components/Loading';
 
 const TaskDetails = () => {
   const { id } = useParams();
   const [task, setTask] = useState()
+  const [loading, setLoading] = useState(false)
+
   const getTaskById = async () => {
-    const response = await axiosInstance.get(API_PATHS.TASKS.GET_BY_ID(id));
-    const taskInfo = response?.data;
-    setTask(taskInfo)
-    console.log(taskInfo);
+    try {
+      setLoading(true)
+      const response = await axiosInstance.get(API_PATHS.TASKS.GET_BY_ID(id));
+      const taskInfo = response?.data;
+      setTask(taskInfo)
+    } catch (error) {
+      console.log("Error wile fetching task");
+      setLoading(false)
+    } finally {
+      setLoading(false)
+    }
 
 
   }
@@ -30,6 +40,7 @@ const TaskDetails = () => {
 
     }
     try {
+      setLoading(true)
       const res = await axiosInstance.put(
         API_PATHS.TASKS.UPDATE_TODO_CHECKLIST(task._id),
         { todoCheckList: updatedTodos }
@@ -43,12 +54,17 @@ const TaskDetails = () => {
       }
 
     } catch (err) {
-      updatedTodos[index].completed = !updatedTodos[index].completed
+      updatedTodos[index].completed = !updatedTodos[index].completed;
+      setLoading(false)
+
+    } finally {
+      setLoading(false)
     }
   };
   useEffect(() => {
     getTaskById()
   }, [id])
+  if(loading) return <Loading/>
   return (
     <DashboardLayout activeMenu="My Tasks">
       <div className='grid grid-cols-1 md:grid-cols-4'>

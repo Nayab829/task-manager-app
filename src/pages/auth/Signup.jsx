@@ -7,16 +7,32 @@ import axiosInstance from '../../utils/axiosInstance'
 import { API_PATHS } from '../../utils/apiPaths'
 import { useAuth } from '../../context/UserContext'
 import AvatarSelector from '../../components/inputs/AvatarSelector'
+import { isEmailValid } from '../../utils/helper'
 const Signup = () => {
-const navigate = useNavigate()
+    const navigate = useNavigate()
     const { updateUser } = useAuth()
     const [name, setName] = useState("")
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
     const [avatar, setAvatar] = useState(null)
     const [adminInviteToken, setAdminInviteToken] = useState("")
+    const [error, setError] = useState("")
     const handleSignup = async (e) => {
         e.preventDefault()
+
+        setError(null);
+        if (!name.trim()) {
+            setError("Name is required");
+            return;
+        }
+        if (!email.trim() || !isEmailValid(email)) {
+            setError("Invalid Email value")
+            return;
+        }
+        if (!password || password.length < 8 || password.length > 15) {
+            setError("Password length must be between 8 and 15 characters.")
+            return;
+        }
         try {
             const formData = new FormData()
             formData.append("name", name);
@@ -38,7 +54,8 @@ const navigate = useNavigate()
             }
 
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            setError(error.response?.data?.message || "Signup failed, please try again.");
 
         }
     }
@@ -88,6 +105,7 @@ const navigate = useNavigate()
                     value={adminInviteToken}
                     handleChange={(e) => setAdminInviteToken(e.target.value)}
                     placeholder="*****" />
+                {error && <p className='text-sm text-red-500 text-center'>{error}</p>}
             </AuthForm>
         </AuthLayout>
     )
