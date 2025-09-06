@@ -42,7 +42,7 @@ const CreateTask = () => {
   const createTask = async () => {
     setLoading(true)
     try {
-      const response = await axiosInstance.post(API_PATHS.TASKS.CREATE, {
+      await axiosInstance.post(API_PATHS.TASKS.CREATE, {
         title: taskData.title,
         description: taskData.description,
         priority: taskData.priority,
@@ -58,8 +58,9 @@ const CreateTask = () => {
       navigate("/admin/tasks")
 
     } catch (error) {
-      console.log("Error while creating task", error.response?.message || error.message);
+      console.log("Error while creating task", error.response?.data?.message || error.message);
       toast.error(error.message || "Something went wrong while creating task.")
+
     } finally {
       setLoading(false)
     }
@@ -68,7 +69,7 @@ const CreateTask = () => {
 
     setLoading(true)
     try {
-      const response = await axiosInstance.put(API_PATHS.TASKS.UPDATE(taskId), {
+      await axiosInstance.put(API_PATHS.TASKS.UPDATE(taskId), {
         title: taskData.title,
         description: taskData.description,
         priority: taskData.priority,
@@ -89,7 +90,6 @@ const CreateTask = () => {
     } catch (error) {
       console.log("Error while updating task", error.response?.message || error.message);
       toast.error(error.message || "Something went wrong while updating task.")
-      setLoading(false)
 
     } finally {
       setLoading(false)
@@ -140,7 +140,6 @@ const CreateTask = () => {
       })
     } catch (error) {
       console.log(error);
-      setLoading(false)
 
     } finally {
       setLoading(false)
@@ -149,14 +148,13 @@ const CreateTask = () => {
   const deleteTask = async () => {
     try {
       setLoading(true)
-      const response = await axiosInstance.delete(API_PATHS.TASKS.DELETE(taskId))
-      console.log(response.data);
+      await axiosInstance.delete(API_PATHS.TASKS.DELETE(taskId))
       toast.success("Task deleted successfully.")
       navigate("/admin/tasks")
 
     } catch (error) {
-      toast.error("Error while deleting task", error);
-      setLoading(false)
+      toast.error(error.response?.data?.message || "Something went wrong while deleting task.");
+
     } finally {
       setLoading(false)
     }
@@ -167,18 +165,12 @@ const CreateTask = () => {
       getTaskById()
 
     }
-  }, []);
-  useEffect(() => {
-
-    console.log(taskData);
-
-
-
-  }, [taskData]);
+  }, [taskId]);
 
   return (
     <DashboardLayout activeMenu="Create Task">
       <div className="card grid grid-cols-1 md:grid-cols-4 ">
+        {/* header */}
         <div className='col-span-3 flex items-center justify-between'>
           <h1 className='text-xl text-gray-800'>{taskId ? "Update Task" : "Create Task"}</h1>
           {taskId && <button
