@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { PRIORITY_DATA } from '../../utils/data'
 import TodoChecklistInput from '../../components/inputs/TodoChecklistInput'
-import { useLocation, useNavigate } from 'react-router'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import axios from 'axios'
 import axiosInstance from '../../utils/axiosInstance'
 import { API_PATHS } from '../../utils/apiPaths'
@@ -13,7 +13,8 @@ import { toast } from 'react-toastify'
 const CreateTask = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { taskId } = location.state || {};
+  // const { taskId } = location.state || {};
+  const {taskId} = useParams()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [taskData, setTaskData] = useState({
@@ -48,8 +49,7 @@ const CreateTask = () => {
         priority: taskData.priority,
         dueDate: taskData.dueDate,
         assignedTo: Array.isArray(taskData.assignedTo)
-          ? taskData.assignedTo
-          : [taskData.assignedTo],
+          && taskData.assignedTo.map((user) => user?._id),
         todoCheckList: taskData.todoCheckList
 
       })
@@ -75,8 +75,7 @@ const CreateTask = () => {
         priority: taskData.priority,
         dueDate: taskData.dueDate,
         assignedTo: Array.isArray(taskData.assignedTo)
-          ? taskData.assignedTo
-          : [taskData.assignedTo],
+          && taskData.assignedTo.map(user => user._id),
         todoCheckList: taskData.todoCheckList.map(item => ({
           text: item.text,
           completed: item.completed
@@ -130,12 +129,21 @@ const CreateTask = () => {
       setLoading(true)
       const response = await axiosInstance.get(API_PATHS.TASKS.GET_BY_ID(taskId))
       const currTask = response.data;
+      console.log(response.data);
+
       setTaskData({
         title: currTask.title,
         description: currTask.description,
         priority: currTask.priority,
         dueDate: new Date(currTask.dueDate).toISOString().split("T")[0],
-        assignedTo: currTask.assignedTo,
+        assignedTo: currTask.assignedTo.map((user) => (
+          {
+            _id: user._id,
+            name: user.name,
+            avatar: user.avatar
+          }
+
+        )),
         todoCheckList: currTask.todoCheckList
       })
     } catch (error) {
@@ -159,10 +167,12 @@ const CreateTask = () => {
       setLoading(false)
     }
   }
+  console.log("taskId", taskId);
 
   useEffect(() => {
     if (taskId) {
       getTaskById()
+
 
     }
   }, [taskId]);

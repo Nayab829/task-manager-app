@@ -64,7 +64,6 @@ const TaskDetails = () => {
   useEffect(() => {
     getTaskById()
   }, [id])
-  if(loading) return <Loading/>
   return (
     <DashboardLayout activeMenu="My Tasks">
       <div className='grid grid-cols-1 md:grid-cols-4'>

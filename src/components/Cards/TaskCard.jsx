@@ -16,7 +16,7 @@ const TaskCard = ({ task, onClick }) => {
                 </span>
             </div>
             <h4 className='font-semibold text-gray-700'>{task.title}</h4>
-            <p className='text-sm text-gray-500'>{task.description}</p>
+            <p className='text-sm text-gray-500 line-clamp-2'>{task.description}</p>
             <div className='flex gap-1 text-sm my-2'>
                 Tasks Done:
                 <span>

@@ -55,7 +55,7 @@ const UserDashboard = () => {
 
     getdashboardData()
   }, [])
-  if(loading) return <Loading/>
+  if (loading) return <Loading />
   return (
     <DashboardLayout activeMenu="Dashboard">
       <div className='card'>
@@ -98,13 +98,21 @@ const UserDashboard = () => {
         <div>
           <div className='card'>
             <h2 className='text-xl text-gray-800 font-medium mb-2'>Task Distributions</h2>
-            <CustomPieChart COLORS={COLORS} data={pieChartData} />
+            {pieChartData.length === 0 ? (
+              <p className="text-gray-400 text-center py-10">No tasks to show</p>
+            ) : (
+              <CustomPieChart COLORS={COLORS} data={pieChartData} />
+            )}
           </div>
 
         </div>
         <div className='card'>
           <h2 className='text-xl text-gray-800 font-medium mb-2'>Task Priorities</h2>
-          <CustombarChart data={barChartData} />
+          {barChartData.length === 0 || barChartData.every(d => d.count === 0) ? (
+            <p className="text-gray-400 text-center py-10">No tasks to show</p>
+          ) : (
+            <CustombarChart data={barChartData} />
+          )}
         </div>
         {/* recent tasks */}
         <div className=" card md:col-span-2">
@@ -112,7 +120,11 @@ const UserDashboard = () => {
             <h2 className='text-gray-600 text-xl font-semibold'>Recent Tasks</h2>
             <Link to={`/admin/tasks`} className='text-sm text-gray-500 hover:text-primary hover:underline'>See all</Link>
           </div>
-          <TaskList tableData={dashboardData?.recentTasks} />
+          {dashboardData?.recentTasks?.length === 0 ? (
+            <p className="text-gray-400 text-center py-4">No recent tasks</p>
+          ) : (
+            <TaskList tableData={dashboardData.recentTasks} />
+          )}
 
         </div>
       </div>

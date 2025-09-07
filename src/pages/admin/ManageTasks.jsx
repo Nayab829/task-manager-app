@@ -40,16 +40,12 @@ const ManageTasks = () => {
 
   }
   const handleClick = (task) => {
-    navigate("/admin/create-task", {
-      state: {
-        taskId: task._id
-      }
-    })
+    navigate(`/admin/create-task/${task._id}`)
   }
   useEffect(() => {
     fetchAllTasks()
   }, [filterStatus])
-  if(loading) return <Loading/>
+  if (loading) return <Loading />
   return (
     <DashboardLayout activeMenu="Manage Tasks">
 
@@ -68,9 +64,15 @@ const ManageTasks = () => {
           </div>
         </div>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-          {Array.isArray(allTasks) && allTasks.map((task) => {
-            return <TaskCard task={task} key={task._id} onClick={() => handleClick(task)} />
-          })}
+          {Array.isArray(allTasks) && allTasks.length > 0 ? (
+            allTasks.map((task) => (
+              <TaskCard task={task} key={task._id} onClick={() => handleClick(task)} />
+            ))
+          ) : (
+            <p className="col-span-full text-center text-gray-500 mt-10">
+              No tasks available.
+            </p>
+          )}
         </div>
 
 

@@ -36,12 +36,8 @@ const UserProvider = ({ children }) => {
         } else {
             setLoading(false);
         }
-    }, []); // 🔹 empty dependency array
-    useEffect(() => {
-        if (user) {
-            console.log("User updated:", user);
-        }
-    }, [user]);
+    }, []);
+   
     const updateUser = (userData) => {
         setUser(userData.data);
         localStorage.setItem("token", userData.token);

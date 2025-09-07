@@ -21,6 +21,7 @@ export const router = createBrowserRouter([
       { path: "/admin/dashboard", element: <Dashboard /> },
       { path: "/admin/tasks", element: <ManageTasks /> },
       { path: "/admin/create-task", element: <CreateTask /> },
+      { path: "/admin/create-task/:taskId", element: <CreateTask /> },
       { path: "/admin/users", element: <ManageUsers /> },
       { path: "/user/dashboard", element: <UserDashboard /> },
       { path: "/users/tasks", element: <MyTasks /> },

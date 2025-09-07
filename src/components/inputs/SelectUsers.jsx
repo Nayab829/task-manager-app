@@ -27,16 +27,14 @@ const SelectUsers = ({ selectedUser = [], setSelectedUser = () => { } }) => {
   useEffect(() => {
     fetchUsers()
   }, [])
-  const toggleUser = (userId) => {
-    if (tempSelectedUsers.includes(userId)) {
-      setTempSelectedUsers(tempSelectedUsers.filter(u => u !== userId));
+  const toggleUser = (user) => {
+    if (tempSelectedUsers.some(u => u._id === user._id)) {
+      setTempSelectedUsers(tempSelectedUsers.filter(u => u._id !== user._id));
     } else {
-      setTempSelectedUsers([...tempSelectedUsers, userId]);
+      setTempSelectedUsers([...tempSelectedUsers, user]);
     }
   };
-  const selectedUsersAvatars = allUsers
-    .filter((user) => selectedUser.includes(user._id))
-    .map((user) => user.avatar)
+  const selectedUsersAvatars = selectedUser.map((user) => user.avatar)
 
   const handleAssign = () => {
     setSelectedUser(tempSelectedUsers)
@@ -56,7 +54,11 @@ const SelectUsers = ({ selectedUser = [], setSelectedUser = () => { } }) => {
 
       }
       {selectedUsersAvatars.length > 0 &&
-        <div onClick={() => setModalOpen(!modalOpen)}>
+        <div 
+        onClick={() => {
+          setTempSelectedUsers([...selectedUser])
+          setModalOpen(!modalOpen);
+          }}>
           <AvatarGroup avatars={selectedUsersAvatars} maxVisible={3} />
         </div>}
       {modalOpen && (
@@ -84,8 +86,8 @@ const SelectUsers = ({ selectedUser = [], setSelectedUser = () => { } }) => {
                   <input
                     type="checkbox"
                     className='cursor-pointer w-5 h-5'
-                    checked={tempSelectedUsers.includes(user._id)}
-                    onChange={() => toggleUser(user._id)}
+                    checked={tempSelectedUsers.some(u => u._id === user._id)}
+                    onChange={() => toggleUser(user)}
                   />
                 </label>
               ))}
