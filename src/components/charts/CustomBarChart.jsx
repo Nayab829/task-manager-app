@@ -1,7 +1,7 @@
 import React from 'react'
 import { Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-const CustombarChart = ({ data, COLORS }) => {
+const CustomBarChart = ({ data, COLORS }) => {
     // Function to alternate colors
     const getBarColor = (entry) => {
         switch (entry?.priority) {
@@ -43,4 +43,4 @@ const CustombarChart = ({ data, COLORS }) => {
     )
 }
 
-export default CustombarChart
+export default CustomBarChart

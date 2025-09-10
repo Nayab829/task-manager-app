@@ -7,8 +7,8 @@ import { API_PATHS } from '../../utils/apiPaths'
 import { Link } from 'react-router'
 import TaskList from '../../components/TaskList'
 import CustomPieChart from '../../components/charts/CustomPieChart'
-import CustombarChart from '../../components/charts/CustombarChart'
 import Loading from '../../components/Loading'
+import CustomBarChart from '../../components/charts/CustomBarChart'
 const COLORS = ["#8884d8", "#3de882ff", "#12ebbcff"];
 const UserDashboard = () => {
   const { user } = useAuth()
@@ -111,7 +111,7 @@ const UserDashboard = () => {
           {barChartData.length === 0 || barChartData.every(d => d.count === 0) ? (
             <p className="text-gray-400 text-center py-10">No tasks to show</p>
           ) : (
-            <CustombarChart data={barChartData} />
+            <CustomBarChart data={barChartData} />
           )}
         </div>
         {/* recent tasks */}
