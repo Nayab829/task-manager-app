@@ -1,4 +1,4 @@
-export const BASE_URL = "http://localhost:3000"
+export const BASE_URL = "https://task-manager-backend-yv4f.onrender.com"
 export const API_PATHS = {
     AUTH: {
         REGISTER: "/api/users/register",
