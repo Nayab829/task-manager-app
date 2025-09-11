@@ -34,7 +34,7 @@ const ManageUsers = () => {
         <h2 className='text-xl'>Manage Users</h2>
         <div className="grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-3">
           {allUsers.map((user, index) => {
-            return <div key={index} className='card flex  justify-center flex-col gap-4'>
+            return <div key={index} className='card m-0 flex  justify-center flex-col gap-4'>
               <div className='flex items-center gap-3'>
                 <img src={user?.avatar || null} alt={user.name} className='w-10 h-10 rounded-full' />
                 <div className='flex flex-col'>
