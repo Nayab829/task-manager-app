@@ -27,14 +27,14 @@ const ManageUsers = () => {
   useEffect(() => {
     fetchUsers()
   }, [])
-  if(loading) return <Loading/>
+  if (loading) return <Loading />
   return (
     <DashboardLayout activeMenu="Manage Users">
       <div className='p-4'>
         <h2 className='text-xl'>Manage Users</h2>
         <div className="grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-3">
           {allUsers.map((user, index) => {
-            return <div key={index} className='card m-0 flex  justify-center flex-col gap-4'>
+            return <div key={index} className='user-card flex  justify-center flex-col gap-4'>
               <div className='flex items-center gap-3'>
                 <img src={user?.avatar || null} alt={user.name} className='w-10 h-10 rounded-full' />
                 <div className='flex flex-col'>
@@ -43,10 +43,16 @@ const ManageUsers = () => {
                 </div>
 
               </div>
-              <div className='flex items-center gap-2'>
-                <div className='bg-violet-50 text-sm font-semibold text-violet-500 flex flex-col py-2 px-4 items-center justify-center rounded-lg'>{user.pendingTasks} <span>Pending</span></div>
-                <div className='bg-cyan-50 text-sm font-semibold text-cyan-500 flex flex-col py-2 px-4 items-center justify-center rounded-lg'>{user.inProgressTasks} <span className='text-nowrap'>In-Progress</span></div>
-                <div className='bg-green-50 text-sm font-semibold text-green-500 flex flex-col py-2 px-4 items-center justify-center rounded-lg'>{user.completedTasks} <span>Completed</span></div>
+              <div
+                className='flex items-center gap-2 justify-center '>
+                <div className='bg-violet-50 text-xs md:text-sm md:font-semibold text-violet-500 flex flex-col py-2 px-3 md:px-4 items-center justify-center rounded-lg font-bold'>{user.pendingTasks}
+                  <span>Pending</span></div>
+                <div
+                  className='bg-cyan-50 text-xs md:text-sm md:font-semibold text-cyan-500 flex flex-col py-3 px-2 md:px-4 items-center justify-center rounded-lg font-bold'>{user.inProgressTasks}
+                  <span className='text-nowrap'>In-Progress</span></div>
+                <div
+                  className='bg-green-50 text-xs md:text-sm md:font-semibold text-green-500 flex flex-col py-2 px-3 md:px-4 items-center justify-center rounded-lg font-bold'>{user.completedTasks}
+                  <span>Completed</span></div>
               </div>
             </div>
           })}
